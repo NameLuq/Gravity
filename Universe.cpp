@@ -5,6 +5,18 @@
 
 using namespace std;
 
+Universe::~Universe() {
+	for (auto a : objects)
+		delete a;
+}
+
+/*bool Universe::check(double a, double b) {
+	for (auto i : objects)
+		if (a - i->x < 0.001 && b - i->y < 0.001)
+			return false;
+	return true;
+}*/
+
 void Universe::add(Object* newobj) {
 	objects.push_back(newobj);
 }
@@ -33,6 +45,11 @@ void Universe::setObject(Object* A) {
 
 Object* Universe::getObject(int i) {
 	return objects[i];
+}
+
+void Universe::collapse(Object* A, Object* B) {
+	A->ax = (A->ax * A->weight + B->ax * B->weight) / (A->weight + B->weight);
+	A->ay = (A->ay * A->weight + B->ay * B->weight) / (A->weight + B->weight);
 }
 
 bool Universe::exist() {
@@ -83,11 +100,15 @@ bool Universe::exist() {
 
 			}
 			else {
-				/*for (auto q : objects)/////outputting coord
-					cout << "coord " << setprecision (6) << ' '
-					     << q->x << ' ' << setprecision (6) << q->y << endl;*/
-				//cout << "collapse" << endl;
-				//return false;
+				if ((*i)->weight * sqrt((*i)->ax * (*i)->ax + (*i)->ay * (*i)->ay)
+				        > (*j)->weight * sqrt((*j)->ax * (*j)->ax + (*j)->ay * (*j)->ay)) {
+					this->collapse(*j, *i);
+					objects.erase(j);
+				} else {
+					this->collapse(*i, *j);
+					objects.erase(i);
+				}
+
 			}
 			++j;
 		}

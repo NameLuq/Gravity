@@ -13,28 +13,43 @@ int main(int argv, char** args) {
 	srand(time(NULL));
 
 	Universe uni;
-	int N = 20;
+	int N = 100;
 	for (int rr = 0; rr < N; ++rr) {
 		int m = (rand() % 4 + 1) * 1000000;
 		int r = m / 1000000;
+
 		float x = (float)((2 * ((2 * rand()) / RAND_MAX) - 1) * (rand() % 390));
 		float y = (float)((2 * ((2 * rand()) / RAND_MAX) - 1) * (rand() % 290));
-		//cout << "x and y " << setprecision (6) << x << ' ' << y << endl;
+		//while (!uni.check(x, y)) {
+		//	x = (float)((2 * ((2 * rand()) / RAND_MAX) - 1) * (rand() % 390));
+		//	y = (float)((2 * ((2 * rand()) / RAND_MAX) - 1) * (rand() % 290));
+		//}
 
 		float ax = (float)((2 * ((2 * rand()) / RAND_MAX) - 1) *
 		                   (((2 * rand()) / RAND_MAX) - 1) * (rand() % 3999000 + 1000));
 		float ay = (float)((2 * ((2 * rand()) / RAND_MAX) - 1) *
 		                   (((2 * rand()) / RAND_MAX) - 1) * (rand() % 3999000 + 1000));
-		//cout << "ax and ay " << setprecision (6) << ax << ' ' << ay << endl;
 		Object* obj = new Object(m, r, x, y, ax, ay);
 		uni.add(obj);
 	}
 
+	/*Object* obj = new Object(1000000, 10, 0.0, 0.0, 0.0, 0.0);
+	uni.add(obj);
+	Object* obj2 = new Object(200000, 2, 100.0, 0.0, -100000.0, 0.0);
+	uni.add(obj2);
+	Object* obj3 = new Object(20000, 3, -100.0, 0.0, 0.0, 100000.0);
+	uni.add(obj3);
+	Object* obj4 = new Object(2000000, 5, 300.0, -200.0, -15000.0, 5000.0);
+	uni.add(obj4);*/
+
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Gravity");
 	window.setFramerateLimit(60);
 
+	int gg = 0;
 	while (window.isOpen())
 	{
+		N = uni.getsize();
+		gg = 1 + gg % 1000;
 
 		uni.exist();
 
@@ -46,7 +61,7 @@ int main(int argv, char** args) {
 			float f = obj->radius / 1.0;
 
 			shape.setRadius(f);
-			shape.setPointCount(50);
+			shape.setPointCount(100);
 
 			if (obj->radius == 1)
 				shape.setFillColor(sf::Color::Red);
@@ -69,7 +84,8 @@ int main(int argv, char** args) {
 				window.close();
 		}
 		window.display();
-		window.clear(sf::Color(1, 1, 1, 50));
+		if (gg % 7 == 0)
+			window.clear(sf::Color(0, 0, 0, 1));
 	}
 
 	cout << "BOOOM";
