@@ -10,13 +10,6 @@ Universe::~Universe() {
 		delete a;
 }
 
-/*bool Universe::check(double a, double b) {
-	for (auto i : objects)
-		if (a - i->x < 0.001 && b - i->y < 0.001)
-			return false;
-	return true;
-}*/
-
 void Universe::add(Object* newobj) {
 	objects.push_back(newobj);
 }
@@ -66,7 +59,6 @@ bool Universe::exist() {
 				cout << "divinition to zero!" << endl;
 				return false;
 			}
-			//cout << "distance " << setprecision(6) << r << endl;
 
 			if (!is_collapse(*i, *j, r)) {
 
@@ -82,8 +74,6 @@ bool Universe::exist() {
 				if ((*i)->y - (*j)->y > 0)
 					sing_y = -1;
 
-				//cout << "acceleration1 " << setprecision (6) << ch_ax1*sing_x << ' ' <<  ch_ay1*sing_y << endl;
-
 				updateObject(*i, ch_ax1 * sing_x, ch_ay1 * sing_y);
 
 				//FOR J
@@ -94,19 +84,17 @@ bool Universe::exist() {
 				double ch_ax2 = a2 * (abs((*j)->x - (*i)->x)) / r;///cos
 				double ch_ay2 = a2 * (abs((*j)->y - (*i)->y)) / r;///sin
 
-				//cout << "acceleration2 " << setprecision (6) << ch_ax2*sing_x << ' ' <<  ch_ay2*sing_y << endl;
-
 				updateObject(*j, ch_ax2 * sing_x, ch_ay2 * sing_y);
 
 			}
 			else {
 				if ((*i)->weight * sqrt((*i)->ax * (*i)->ax + (*i)->ay * (*i)->ay)
-				        > (*j)->weight * sqrt((*j)->ax * (*j)->ax + (*j)->ay * (*j)->ay)) {
+				        - (*j)->weight * sqrt((*j)->ax * (*j)->ax + (*j)->ay * (*j)->ay) > 0.0001) {
 					this->collapse(*j, *i);
-					objects.erase(j);
+					objects.erase(i);
 				} else {
 					this->collapse(*i, *j);
-					objects.erase(i);
+					objects.erase(j);
 				}
 
 			}
@@ -121,8 +109,6 @@ bool Universe::exist() {
 	setObject(*e);
 
 	for (auto q : objects) {
-		/*cout << "coord " << setprecision (6) << ' ' << q->x <<
-		' ' << setprecision (6) << q->y << endl;*/
 		q->changed_ax = 0; q->changed_ay = 0;//////deleting makes it too fast
 	}
 

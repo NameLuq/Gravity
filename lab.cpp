@@ -13,34 +13,36 @@ int main(int argv, char** args) {
 	srand(time(NULL));
 
 	Universe uni;
-	int N = 100;
+	int N = 500;
 	for (int rr = 0; rr < N; ++rr) {
-		int m = (rand() % 4 + 1) * 1000000;
+		unsigned long int m = (rand() % 4 + 1) * 1000000;
 		int r = m / 1000000;
 
-		float x = (float)((2 * ((2 * rand()) / RAND_MAX) - 1) * (rand() % 390));
-		float y = (float)((2 * ((2 * rand()) / RAND_MAX) - 1) * (rand() % 290));
-		//while (!uni.check(x, y)) {
-		//	x = (float)((2 * ((2 * rand()) / RAND_MAX) - 1) * (rand() % 390));
-		//	y = (float)((2 * ((2 * rand()) / RAND_MAX) - 1) * (rand() % 290));
-		//}
+		double x = (double)((2 * ((2 * rand()) / RAND_MAX) - 1) * (rand() % 390));
+		double y = (double)((2 * ((2 * rand()) / RAND_MAX) - 1) * (rand() % 290));
 
-		float ax = (float)((2 * ((2 * rand()) / RAND_MAX) - 1) *
-		                   (((2 * rand()) / RAND_MAX) - 1) * (rand() % 3999000 + 1000));
-		float ay = (float)((2 * ((2 * rand()) / RAND_MAX) - 1) *
-		                   (((2 * rand()) / RAND_MAX) - 1) * (rand() % 3999000 + 1000));
+		double ax = (double)((2 * ((2 * rand()) / RAND_MAX) - 1) *
+		                     (((2 * rand()) / RAND_MAX) - 1) * (rand() % 3999000 + 1000));
+		double ay = (double)((2 * ((2 * rand()) / RAND_MAX) - 1) *
+		                     (((2 * rand()) / RAND_MAX) - 1) * (rand() % 3999000 + 1000));
 		Object* obj = new Object(m, r, x, y, ax, ay);
 		uni.add(obj);
 	}
 
-	/*Object* obj = new Object(1000000, 10, 0.0, 0.0, 0.0, 0.0);
-	uni.add(obj);
-	Object* obj2 = new Object(200000, 2, 100.0, 0.0, -100000.0, 0.0);
-	uni.add(obj2);
-	Object* obj3 = new Object(20000, 3, -100.0, 0.0, 0.0, 100000.0);
-	uni.add(obj3);
-	Object* obj4 = new Object(2000000, 5, 300.0, -200.0, -15000.0, 5000.0);
-	uni.add(obj4);*/
+	/*Object* sun = new Object(50000, 20, 0.0, 0.0, 0.0, 0.0);
+
+	Object* earth = new Object(1, 5, 0.0, 100.0, -6000.0 , -2000.0);
+
+	Object* nibiru = new Object(1, 3, 0.0, -50.0, 8000.0, 2000.0);
+
+	Object* planet228 = new Object(1, 7, 150.0, 0.0, -2000.0, 4000.0);
+
+	Object* planet1 = new Object(1, 4, 75.0, 0.0, -1500.0, 6000.0);
+	uni.add(sun);
+	uni.add(earth);
+	uni.add(nibiru);
+	uni.add(planet228);
+	uni.add(planet1);*/
 
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Gravity");
 	window.setFramerateLimit(60);
@@ -58,7 +60,7 @@ int main(int argv, char** args) {
 		for (int i = 0; i < N; ++i) {
 
 			Object* obj = uni.getObject(i);
-			float f = obj->radius / 1.0;
+			float f = (float)obj->radius;
 
 			shape.setRadius(f);
 			shape.setPointCount(100);
@@ -85,7 +87,7 @@ int main(int argv, char** args) {
 		}
 		window.display();
 		if (gg % 7 == 0)
-			window.clear(sf::Color(0, 0, 0, 1));
+			window.clear();
 	}
 
 	cout << "BOOOM";

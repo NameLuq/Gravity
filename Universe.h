@@ -17,7 +17,6 @@ public:
 	void add(Object*);
 
 	int getsize() {return objects.size();};
-	//bool check(double, double);
 
 	double getDistance(Object*, Object*);
 	bool is_collapse(Object*, Object*, double);
