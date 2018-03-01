@@ -13,22 +13,7 @@ int main(int argv, char** args) {
 	srand(time(NULL));
 
 	Universe uni;
-	int N = 1;
-	for (int rr = 0; rr < N; ++rr) {
-		unsigned long int m = (rand() % 4 + 1);
-		int r = m;
-
-		double x = (double)((2 * ((2 * rand()) / RAND_MAX) - 1) * (rand() % 390));
-		double y = (double)((2 * ((2 * rand()) / RAND_MAX) - 1) * (rand() % 290));
-
-		double ax = (double)((2 * ((2 * rand()) / RAND_MAX) - 1) *
-		                     (((2 * rand()) / RAND_MAX) - 1) * (rand() % 2));
-		double ay = (double)((2 * ((2 * rand()) / RAND_MAX) - 1) *
-		                     (((2 * rand()) / RAND_MAX) - 1) * (rand() % 2));
-		Object* obj = new Object(m, r, x, y, ax, ay);
-		uni.add(obj);
-	}
-
+	int N = 0;
 	/*Object* sun = new Object(50000, 20, 0.0, 0.0, 0.0, 0.0);
 	uni.add(sun);*/
 	/*Object* earth = new Object(1, 5, 0.0, 100.0, -6000.0 , -2000.0);
@@ -105,6 +90,7 @@ int main(int argv, char** args) {
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
 				N = 0;
 				uni.clear();
+				cout << "rbc" << endl;
 			}
 
 		}

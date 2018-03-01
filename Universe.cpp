@@ -26,15 +26,13 @@ void Universe::Down() {
 }
 
 void Universe::clear() {
-	auto i = objects.end() - 1;
-	while (i >= objects.begin())
-		delete &i;
+	for (auto a : objects)
+		delete a;
 }
 
 Universe::~Universe() {
-	auto i = objects.end() - 1;
-	while (i >= objects.begin())
-		delete &i;
+	for (auto a : objects)
+		delete a;
 }
 
 void Universe::add(Object* newobj) {
@@ -50,7 +48,6 @@ bool Universe::is_collapse(Object* A, Object* B, double r) {
 }
 
 void Universe::updateObject(Object* A, double ch_ax, double ch_ay) {
-
 	A->changed_ax += ch_ax;
 	A->changed_ay += ch_ay;
 }
@@ -58,7 +55,6 @@ void Universe::updateObject(Object* A, double ch_ax, double ch_ay) {
 void Universe::setObject(Object* A) {
 	A->ax += A->changed_ax;
 	A->ay += A->changed_ay;
-
 	A->x += A->ax;
 	A->y += A->ay;
 }
@@ -77,7 +73,7 @@ bool Universe::exist() {
 	auto i = objects.begin();
 	auto e = objects.end();
 
-	while (i < e - 1) {
+	while (i < e - 1 && objects.size() > 0) {
 
 		auto j = i + 1;
 		while (j < e) {
@@ -108,7 +104,7 @@ bool Universe::exist() {
 
 			}
 			else {
-				if ((*i)->weight * sqrt((*i)->ax * (*i)->ax + (*i)->ay * (*i)->ay)
+				/*if ((*i)->weight * sqrt((*i)->ax * (*i)->ax + (*i)->ay * (*i)->ay)
 				        - (*j)->weight * sqrt((*j)->ax * (*j)->ax + (*j)->ay * (*j)->ay) > 0.0001) {
 					this->collapse(*j, *i);
 					objects.erase(i);
@@ -116,18 +112,18 @@ bool Universe::exist() {
 					this->collapse(*i, *j);
 					objects.erase(j);
 				}
-				e = objects.end();
-
+				e = objects.end();*/
 			}
 			++j;
 		}
-
 		setObject(*i);
 		++i;
 	}
 
-	auto l = objects.end() - 1;/////last object
-	setObject(*l);
+	if (i < e - 1 && objects.size() > 0) {
+		auto l = objects.end() - 1;/////last object
+		setObject(*l);
+	}
 
 	for (auto q : objects) {
 		q->changed_ax = 0; q->changed_ay = 0;//////deleting makes it too fast
