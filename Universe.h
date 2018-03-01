@@ -8,7 +8,6 @@ class Universe
 {
 private:
 	std::vector<Object*> objects;
-	const double dt = 0.001;
 
 public:
 	Universe() = default;
@@ -28,6 +27,13 @@ public:
 	void updateObject(Object*, double, double);
 	void setObject(Object*);
 	Object* getObject(int);
+
+	void Left();
+	void Right();
+	void Up();
+	void Down();
+
+	void clear();
 };
 
 #endif

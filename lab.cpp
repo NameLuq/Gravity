@@ -13,25 +13,25 @@ int main(int argv, char** args) {
 	srand(time(NULL));
 
 	Universe uni;
-	int N = 500;
+	int N = 1;
 	for (int rr = 0; rr < N; ++rr) {
-		unsigned long int m = (rand() % 4 + 1) * 1000000;
-		int r = m / 1000000;
+		unsigned long int m = (rand() % 4 + 1);
+		int r = m;
 
 		double x = (double)((2 * ((2 * rand()) / RAND_MAX) - 1) * (rand() % 390));
 		double y = (double)((2 * ((2 * rand()) / RAND_MAX) - 1) * (rand() % 290));
 
 		double ax = (double)((2 * ((2 * rand()) / RAND_MAX) - 1) *
-		                     (((2 * rand()) / RAND_MAX) - 1) * (rand() % 3999000 + 1000));
+		                     (((2 * rand()) / RAND_MAX) - 1) * (rand() % 2));
 		double ay = (double)((2 * ((2 * rand()) / RAND_MAX) - 1) *
-		                     (((2 * rand()) / RAND_MAX) - 1) * (rand() % 3999000 + 1000));
+		                     (((2 * rand()) / RAND_MAX) - 1) * (rand() % 2));
 		Object* obj = new Object(m, r, x, y, ax, ay);
 		uni.add(obj);
 	}
 
 	/*Object* sun = new Object(50000, 20, 0.0, 0.0, 0.0, 0.0);
-
-	Object* earth = new Object(1, 5, 0.0, 100.0, -6000.0 , -2000.0);
+	uni.add(sun);*/
+	/*Object* earth = new Object(1, 5, 0.0, 100.0, -6000.0 , -2000.0);
 
 	Object* nibiru = new Object(1, 3, 0.0, -50.0, 8000.0, 2000.0);
 
@@ -44,14 +44,12 @@ int main(int argv, char** args) {
 	uni.add(planet228);
 	uni.add(planet1);*/
 
-	sf::RenderWindow window(sf::VideoMode(800, 600), "Gravity");
+	sf::RenderWindow window(sf::VideoMode(800, 600), "Gravity"/*, sf::Style::Fullscreen*/);
 	window.setFramerateLimit(60);
 
-	int gg = 0;
 	while (window.isOpen())
 	{
 		N = uni.getsize();
-		gg = 1 + gg % 1000;
 
 		uni.exist();
 
@@ -84,10 +82,36 @@ int main(int argv, char** args) {
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+				uni.Left();
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+				uni.Right();
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+				uni.Up();
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+				uni.Down();
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+				int m = (rand() % 4 + 1);
+				int r = m;
+
+				double ax = (double)((2 * ((2 * rand()) / RAND_MAX) - 1) *
+				                     (((2 * rand()) / RAND_MAX) - 1) * (rand() % 2));
+				double ay = (double)((2 * ((2 * rand()) / RAND_MAX) - 1) *
+				                     (((2 * rand()) / RAND_MAX) - 1) * (rand() % 2));
+				Object* obj = new Object(m, r, event.mouseButton.x - 400.0, 300 - event.mouseButton.y, ax, ay);
+				uni.add(obj);
+				N++;
+			}
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
+				N = 0;
+				uni.clear();
+			}
+
 		}
+
 		window.display();
-		if (gg % 7 == 0)
-			window.clear();
+		//if (gg % 7 == 0)
+		window.clear();
 	}
 
 	cout << "BOOOM";

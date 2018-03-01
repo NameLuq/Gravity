@@ -5,9 +5,36 @@
 
 using namespace std;
 
-Universe::~Universe() {
+void Universe::Left() {
 	for (auto a : objects)
-		delete a;
+		a->x += 1.0;
+}
+
+void Universe::Right() {
+	for (auto a : objects)
+		a->x -= 1.0;
+}
+
+void Universe::Up() {
+	for (auto a : objects)
+		a->y -= 1.0;
+}
+
+void Universe::Down() {
+	for (auto a : objects)
+		a->y += 1.0;
+}
+
+void Universe::clear() {
+	auto i = objects.end() - 1;
+	while (i >= objects.begin())
+		delete &i;
+}
+
+Universe::~Universe() {
+	auto i = objects.end() - 1;
+	while (i >= objects.begin())
+		delete &i;
 }
 
 void Universe::add(Object* newobj) {
@@ -19,7 +46,7 @@ double Universe::getDistance(Object* A, Object* B) {
 }
 
 bool Universe::is_collapse(Object* A, Object* B, double r) {
-	return  ((A->radius + B->radius) * (1 + dt) - r >= 0);
+	return  ((A->radius + B->radius) - r >= 0);
 }
 
 void Universe::updateObject(Object* A, double ch_ax, double ch_ay) {
@@ -32,8 +59,8 @@ void Universe::setObject(Object* A) {
 	A->ax += A->changed_ax;
 	A->ay += A->changed_ay;
 
-	A->x += A->ax * dt * dt * 3 / 2;
-	A->y += A->ay * dt * dt * 3 / 2;
+	A->x += A->ax;
+	A->y += A->ay;
 }
 
 Object* Universe::getObject(int i) {
@@ -48,11 +75,12 @@ void Universe::collapse(Object* A, Object* B) {
 bool Universe::exist() {
 
 	auto i = objects.begin();
+	auto e = objects.end();
 
-	while (i < objects.end() - 1) {
+	while (i < e - 1) {
 
 		auto j = i + 1;
-		while (j < objects.end()) {
+		while (j < e) {
 
 			double r = getDistance(*i, *j);
 			if (r - 0.0 < 0.000001) {
@@ -65,26 +93,18 @@ bool Universe::exist() {
 				//FOR I
 				double a1 = (*j)->weight / pow(r, 2);
 
-				double ch_ax1 = a1 * (abs((*j)->x - (*i)->x)) / r;///cos
-				double ch_ay1 = a1 * (abs((*j)->y - (*i)->y)) / r;///sin
-				int sing_x = 1;
-				int sing_y = 1;
-				if ((*i)->x - (*j)->x > 0)
-					sing_x = -1;
-				if ((*i)->y - (*j)->y > 0)
-					sing_y = -1;
+				double ch_ax1 = a1 * ((*j)->x - (*i)->x) / r;///cos
+				double ch_ay1 = a1 * ((*j)->y - (*i)->y) / r;///sin
 
-				updateObject(*i, ch_ax1 * sing_x, ch_ay1 * sing_y);
+				updateObject(*i, ch_ax1, ch_ay1);
 
 				//FOR J
-				sing_x *= -1;
-				sing_y *= -1;
 
 				double a2 = (*i)->weight / pow(r, 2);
-				double ch_ax2 = a2 * (abs((*j)->x - (*i)->x)) / r;///cos
-				double ch_ay2 = a2 * (abs((*j)->y - (*i)->y)) / r;///sin
+				double ch_ax2 = a2 * ((*i)->x - (*j)->x) / r;///cos
+				double ch_ay2 = a2 * ((*i)->y - (*j)->y) / r;///sin
 
-				updateObject(*j, ch_ax2 * sing_x, ch_ay2 * sing_y);
+				updateObject(*j, ch_ax2, ch_ay2);
 
 			}
 			else {
@@ -96,6 +116,7 @@ bool Universe::exist() {
 					this->collapse(*i, *j);
 					objects.erase(j);
 				}
+				e = objects.end();
 
 			}
 			++j;
@@ -105,8 +126,8 @@ bool Universe::exist() {
 		++i;
 	}
 
-	auto e = objects.end() - 1;/////last object
-	setObject(*e);
+	auto l = objects.end() - 1;/////last object
+	setObject(*l);
 
 	for (auto q : objects) {
 		q->changed_ax = 0; q->changed_ay = 0;//////deleting makes it too fast
