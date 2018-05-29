@@ -14,20 +14,6 @@ int main(int argv, char** args) {
 
 	Universe uni;
 	int N = 0;
-	/*Object* sun = new Object(50000, 20, 0.0, 0.0, 0.0, 0.0);
-	uni.add(sun);*/
-	/*Object* earth = new Object(1, 5, 0.0, 100.0, -6000.0 , -2000.0);
-
-	Object* nibiru = new Object(1, 3, 0.0, -50.0, 8000.0, 2000.0);
-
-	Object* planet228 = new Object(1, 7, 150.0, 0.0, -2000.0, 4000.0);
-
-	Object* planet1 = new Object(1, 4, 75.0, 0.0, -1500.0, 6000.0);
-	uni.add(sun);
-	uni.add(earth);
-	uni.add(nibiru);
-	uni.add(planet228);
-	uni.add(planet1);*/
 
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Gravity"/*, sf::Style::Fullscreen*/);
 	window.setFramerateLimit(60);
@@ -90,17 +76,13 @@ int main(int argv, char** args) {
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
 				N = 0;
 				uni.clear();
-				cout << "rbc" << endl;
 			}
 
 		}
 
 		window.display();
-		//if (gg % 7 == 0)
 		window.clear();
 	}
-
-	cout << "BOOOM";
 
 	return 0;
 }
