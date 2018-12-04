@@ -1,4 +1,1 @@
-# Gravity
-simulation
-
-using sfml
+# Gravity simulation with sfml
